@@ -74,8 +74,7 @@ AddEventHandler("pvpsystem:duoexit", function(duo_id)
     end
 end)
 
-------- MEMBROS -------------------------
-
+-- DUO MEMBER
 RegisterCommand("member", function()
 	if myduo[1] then
 		TriggerEvent("chatMessage", "Your duo: ",{255,255,255},"[ID] ".. myduo[1])
@@ -84,7 +83,7 @@ RegisterCommand("member", function()
 	end
 end)
 
--------- 2v2 -----------
+-- 2v2
 RegisterCommand("2v2", function()
     if (myduo[1]~=nil and owner==true) then
         if (counter==0) then
@@ -101,8 +100,7 @@ RegisterCommand("2v2", function()
     end
 end)
 
---------------------------------------------
-
+-- NOTIFICATIONS
 function notify(str)
     BeginTextCommandThefeedPost("STRING")
     AddTextComponentSubstringPlayerName(str)
