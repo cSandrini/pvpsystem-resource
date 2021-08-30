@@ -1,4 +1,5 @@
 # PvP System
+This is a 1v1 and 2v2 resource for FiveM.
 Fight a duel and train your PvP skills with this resource. Contain two arenas `(ymaps)`.
 
 ### Modes:
