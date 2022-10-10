@@ -12,7 +12,7 @@ Contain two arenas `(ymaps)`.
 | Command | Description |
 | ------- | ----------- |
 | `1v1` | Join the player to the 1v1 queue |
-| `1v1 [ID]` | Request some player to a duel (needs QBCore Framework to work) |
+| `1v1 [ID]` | Request a player to a duel (needs QBCore Framework to work) |
 | `2v2` | Join the team to the 2v2 queue |
 
 ## Preview
