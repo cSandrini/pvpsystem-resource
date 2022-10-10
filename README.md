@@ -15,6 +15,9 @@ Contain two arenas `(ymaps)`.
 | `1v1 [ID]` | Request some player to a duel (needs QBCore Framework to work) |
 | `2v2` | Join the team to the 2v2 queue |
 
+## Preview
+![img](https://user-images.githubusercontent.com/55068969/194797053-001effa5-4cc3-46b7-9446-e690a7f454ce.png)
+
 ## Dependency
 This resource needs vRP or QBCore frameworks to work. 
 
@@ -24,3 +27,4 @@ This resource needs vRP or QBCore frameworks to work.
 
 ## License
 [MIT](LICENSE) © cSandrini
+
