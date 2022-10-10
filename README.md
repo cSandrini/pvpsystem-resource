@@ -1,6 +1,7 @@
 # PvP System
 This is a 1v1 and 2v2 resource for FiveM.
-Fight a duel and train your PvP skills with this resource. Contain two arenas `(ymaps)`.
+Fight a duel and train your PvP skills in more than one dimension with this resource. 
+Contain two arenas `(ymaps)`.
 
 ### Modes:
 - `1v1` - Train alone against other player
@@ -11,10 +12,11 @@ Fight a duel and train your PvP skills with this resource. Contain two arenas `(
 | Command | Description |
 | ------- | ----------- |
 | `1v1` | Join the player to the 1v1 queue |
+| `1v1 [ID]` | Request some player to a duel (needs QBCore Framework to work) |
 | `2v2` | Join the team to the 2v2 queue |
 
 ## Dependency
-This resource needs vRP framework to work
+This resource needs vRP or QBCore frameworks to work. 
 
 ## How to install
 1. Add the folders `pvpsystem` and `arenas` to your resource directory
