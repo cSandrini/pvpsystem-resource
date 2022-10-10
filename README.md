@@ -22,8 +22,9 @@ Contain two arenas `(ymaps)`.
 This resource needs vRP or QBCore frameworks to work. 
 
 ## How to install
-1. Add the folders `pvpsystem` and `arenas` to your resource directory
-2. Add `start pvpsystem` and `start arenas` to your server.cfg
+1. Rename the folder `pvpsystem-(framework)` to `pvpsystem`
+2. Add the folders `pvpsystem` and `arenas` to your resource directory
+3. Add `start pvpsystem` and `start arenas` to your server.cfg
 
 ## License
 [MIT](LICENSE) © cSandrini
