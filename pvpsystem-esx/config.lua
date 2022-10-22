@@ -15,6 +15,6 @@ Config.secondSpawnCoords1v1 = {-1727.01, 145.06, 64.4} -- Second spawn point coo
 Config.secondSpawnCoords1v1Heading = 38.05 -- Sets a point for the player to look at when teleported
 
 Config.firstTeamSpawnCoords2v2 = {1214.89, 3115.29, 40.41} -- (Team 1) First spawn point coords of 2v2 arena // {X, Y, Z} 
-Config.firstTeamSpawnCoords2v2Heading = 314.48 -- Sets a point for the player to look at when teleported
+Config.firstTeamSpawnCoords2v2Heading = 286.34 -- Sets a point for the player to look at when teleported
 Config.secondTeamSpawnCoords2v2 = {1115.73, 3090.54, 40.41} -- (Team 2) Third spawn point coords of 2v2 arena // {X, Y, Z} 
-Config.secondTeamSpawnCoords2v2Heading = 314.48 -- Sets a point for the player to look at when teleported
+Config.secondTeamSpawnCoords2v2Heading = 108.94 -- Sets a point for the player to look at when teleported

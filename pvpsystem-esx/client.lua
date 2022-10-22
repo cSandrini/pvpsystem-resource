@@ -5,20 +5,20 @@ counter = 0 -- IF COUNTER EQUALS 1 THE PLAYER IS IN THE QUEUE
 -- MESSAGES
 RegisterNetEvent("pvpsystem:msg")
 AddEventHandler("pvpsystem:msg", function(numero)
-	ESX.TextUI("You are in the arena: #"..numero, "success")
+	ESX.ShowNotification("You are in the arena: #"..numero, "success", 3000)
 	SetGameplayCamRelativeHeading(0)
 end)
 
 RegisterNetEvent("pvpsystem:msgWon")
 AddEventHandler("pvpsystem:msgWon", function()
-    ESX.TextUI("You won!", "success")
+    ESX.ShowNotification("You won!", "success", 3000)
 	SetGameplayCamRelativeHeading(0)
     counter = 0
 end)
 
 RegisterNetEvent("pvpsystem:msgLost")
 AddEventHandler("pvpsystem:msgLost", function()
-	ESX.TextUI("You lost!", "error")
+	ESX.ShowNotification("You lost!", "error", 3000)
     SetGameplayCamRelativeHeading(0)
     counter = 0
 end)
@@ -30,25 +30,25 @@ AddEventHandler("pvpsystem:pvpqueue", function(ident, player, args)
 		if (args==nil) then
 			if (ident==1) then
 				if (counter == 0) then
-					ESX.TextUI("You joined the queue (1v1)", "success")
+					ESX.ShowNotification("You joined the queue (1v1)", "success", 3000)
 					TriggerServerEvent("pvpsystem:counter1v1", source)
-					counter = 0
+					counter = 1
 				else
-					ESX.TextUI("You are already in a queue", "error")
+					ESX.ShowNotification("You are already in a queue", "error", 3000)
 				end
 			else
 				if (counter == 0) then
-					ESX.TextUI("You joined the queue (2v2)", "success")
+					ESX.ShowNotification("You joined the queue (2v2)", "success", 3000)
 					TriggerServerEvent("pvpsystem:counter2v2", source)
-					counter = 0
+					counter = 1
 				else 
-					ESX.TextUI("You are already in a queue", "error")
+					ESX.ShowNotification("You are already in a queue", "error", 3000)
 				end
 			end
 		else
 			if (counter==0) then
 				TriggerServerEvent("pvpsystem:comargs", player, args)
-				counter = 0
+				counter = 1
 			end
 		end
 	end

@@ -1,3 +1,35 @@
+-- FUNCTIONS 
+function function1v1(player, x, y, z, heading, dimension)
+	SetEntityCoords(player, x, y, z, false, true, true, false)
+	SetEntityHeading(player, heading)
+	SetPlayerRoutingBucket(player, dimension) -- DIMENSION
+	RemoveAllPedWeapons(player, false)
+	GiveWeaponToPed(player, GetHashKey("weapon_pistol_mk2"), 200, true)
+	SetCurrentPedWeapon(player, GetHashKey("weapon_pistol_mk2"), true)
+	TriggerClientEvent("pvpsystem:msg", player, 1)
+end
+
+function revivePlayer(player, x, y, z, heading)
+	SetEntityCoords(player, x, y,  z, false, true, true, false)
+	SetEntityHeading(player, heading)
+	SetPlayerRoutingBucket(player, 0)
+	TriggerClientEvent("pvpsystem:revive", player)
+	TriggerClientEvent("pvpsystem:heal", player)
+	TriggerClientEvent("esx_ambulancejob:revive", player)
+end
+
+function dimensions(dimension, initialDimension)
+	Citizen.CreateThread(function()
+		while true do
+			if (dimension==(initialDimension+301)) then
+				dimension=initialDimension
+			end
+			Citizen.Wait(10)
+		end
+	end)
+end
+
+-- VARS
 id = nil
 -- HEALTH LIMIT TO GET IN COMA (DIE)
 healthlimit = 0 -- CHANGE TO HEALTH LIMIT OF YOUR SERVER IF DOESN'T WORK
@@ -5,22 +37,21 @@ healthlimit = 0 -- CHANGE TO HEALTH LIMIT OF YOUR SERVER IF DOESN'T WORK
 -- VARS TO 1v1
 count = 1
 queue1v1 = {}
-initialdimension1v1 = 1000
-dimension1v1 = initialdimension1v1 -- INITIAL DIMENSION 1V1
+initialDimension1v1 = 1000
+dimension1v1 = initialDimension1v1 -- INITIAL DIMENSION 1V1
 
 -- VARS TO 2v2
 queue2v2={}
-initialdimension2v2 = 100
-dimension2v2 = initialdimension2v2 -- INITIAL DIMENSION 2V2
+initialDimension2v2 = 100
+dimension2v2 = initialDimension2v2 -- INITIAL DIMENSION 2V2
 
 -- DISABLE VEHICLES IN THE SOME DIMENSIONS
 if Config.disableVehicles then
-	for i = (initialdimension1v1+300),initialdimension1v1,-1 do 
-	SetRoutingBucketEntityLockdownMode(i, "strict")
+	for i = (initialDimension1v1+300),initialDimension1v1,-1 do 
+		SetRoutingBucketEntityLockdownMode(i, "strict")
 	end
-
-	for i = (initialdimension2v2+300),initialdimension2v2,-1 do 
-	SetRoutingBucketEntityLockdownMode(i, "strict")
+	for i = (initialDimension2v2+300),initialDimension2v2,-1 do 
+		SetRoutingBucketEntityLockdownMode(i, "strict")
 	end
 end
 
@@ -42,29 +73,11 @@ Citizen.CreateThread(function()
 	while true do
 	    if (#queue1v1>=2) then
 		-- PLAYER 1
-	    SetEntityCoords(queue1v1[1], Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], true, true, true, false)
-	    SetEntityHeading(queue1v1[1], Config.firstSpawnCoords1v1Heading)
-	    SetPlayerRoutingBucket(queue1v1[1], dimension1v1) -- DIMENSION
-	    
-	    RemoveAllPedWeapons(queue1v1[1], false)
-	    GiveWeaponToPed(queue1v1[1], GetHashKey("weapon_pistol_mk2"), 200, true)
-	    SetCurrentPedWeapon(queue1v1[1], GetHashKey("weapon_pistol_mk2"), true)
-
-	    TriggerClientEvent("pvpsystem:msg", queue1v1[1], 1)
-
+		function1v1(queue1v1[1], Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], Config.firstSpawnCoords1v1Heading, dimension1v1) 
 		-- PLAYER 2
-	    SetEntityCoords(queue1v1[2], Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], true, true, true, false)
-	    SetEntityHeading(queue1v1[2], Config.secondSpawnCoords1v1Heading)
-	    SetPlayerRoutingBucket(queue1v1[2], dimension1v1) -- DIMENSION
-	    
-	    RemoveAllPedWeapons(queue1v1[2], false)
-	    GiveWeaponToPed(queue1v1[2], GetHashKey("weapon_pistol_mk2"), 200, true)
-	    SetCurrentPedWeapon(queue1v1[2], GetHashKey("weapon_pistol_mk2"), true)
-
-	    TriggerClientEvent("pvpsystem:msg", queue1v1[2], 1)
-
-	    TriggerEvent("pvpsystem:die1v1", queue1v1[1], queue1v1[2]) -- CHECK IF ANY PLAYER DIE
-
+		function1v1(queue1v1[2], Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1) 
+		-- CHECK IF ANY PLAYER DIE
+	    TriggerEvent("pvpsystem:die1v1", queue1v1[1], queue1v1[2])
 		-- DIMENSIONS SETTINGS
 	    dimension1v1 = dimension1v1 + 1 
 	   	table.remove(queue1v1, 2)
@@ -78,29 +91,12 @@ end)
 RegisterServerEvent("pvpsystem:comargs")
 AddEventHandler("pvpsystem:comargs", function(player1, player2)
 	-- PLAYER 1
-	SetEntityCoords(player1, Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], true, true, true, false)
-    SetEntityHeading(player1, Config.firstSpawnCoords1v1Heading)
-    
-    RemoveAllPedWeapons(player1, false)
-    GiveWeaponToPed(player1, GetHashKey("weapon_pistol_mk2"), 200, true)
-    SetCurrentPedWeapon(player1, GetHashKey("weapon_pistol_mk2"), true)
-	SetPlayerRoutingBucket(player1, dimension1v1) -- DIMENSION
-	
-    TriggerClientEvent("pvpsystem:msg", player1, 1)
-
+	function1v1(player1, Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], Config.firstSpawnCoords1v1Heading, dimension1v1) 
 	-- PLAYER 2
-    SetEntityCoords(player2, Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], true, true, true, false)
-    SetEntityHeading(player2, Config.secondSpawnCoords1v1Heading)
-    SetPlayerRoutingBucket(player2, dimension1v1) -- DIMENSION
-	
-    RemoveAllPedWeapons(player2, false)
-    GiveWeaponToPed(player2, GetHashKey("weapon_pistol_mk2"), 200, true)
-    SetCurrentPedWeapon(player2, GetHashKey("weapon_pistol_mk2"), true)
-
-    TriggerClientEvent("pvpsystem:msg", player2, 1)
-
+	function1v1(player2, Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1) 
+	-- CHECK IF ANY PLAYER DIE
     TriggerEvent("pvpsystem:die1v1", player1, player2)
-	
+	-- DIMENSIONS SETTINGS
 	dimension1v1 = dimension1v1 + 1 
 end)
 
@@ -131,23 +127,10 @@ AddEventHandler("pvpsystem:die1v1", function(player1, player2)
 					TriggerClientEvent("pvpsystem:msgWon", player1)
 					TriggerClientEvent("pvpsystem:msgLost", player2)
 				end
-
 				Citizen.Wait(4000)
-				
-				SetEntityCoords(player1, Config.respawnCoords[1], Config.respawnCoords[2],  Config.respawnCoords[3], true, true, true, false)
-				SetEntityHeading(player1, Config.respawnCoordsHeading)
-				SetPlayerRoutingBucket(player1, 0)
-				TriggerClientEvent("pvpsystem:revive", player1)
-				TriggerClientEvent("pvpsystem:heal", player1)
-				TriggerClientEvent("esx_ambulancejob:revive", player1)
-
-				
-				SetEntityCoords(player2, Config.respawnCoords[1],  Config.respawnCoords[2],  Config.respawnCoords[3], true, true, true, false)
-				SetEntityHeading(player2, Config.respawnCoordsHeading)
-				SetPlayerRoutingBucket(player2, 0)
-				TriggerClientEvent("pvpsystem:revive", player2)
-				TriggerClientEvent("pvpsystem:heal", player2)
-				TriggerClientEvent("esx_ambulancejob:revive", player2)
+				-- REVIVE PLAYERS
+				revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+				revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				break
 			end
 			Citizen.Wait(1)
@@ -159,32 +142,25 @@ end)
 Citizen.CreateThread(function()
 	while true do
 	    if (#queue2v2>=4) then
-	    	SetEntityCoords(queue2v2[1], Config.firstTeamSpawnCoords2v2[1], Config.firstTeamSpawnCoords2v2[2], Config.firstTeamSpawnCoords2v2[3], true, true, true, false)
-	    	SetEntityCoords(queue2v2[2], Config.firstTeamSpawnCoords2v2[1], Config.firstTeamSpawnCoords2v2[2], Config.firstTeamSpawnCoords2v2[3], true, true, true, false)
-	    	SetEntityCoords(queue2v2[3], Config.firstTeamSpawnCoords2v2[1], Config.firstTeamSpawnCoords2v2[2], Config.firstTeamSpawnCoords2v2[3], true, true, true, false)
-	    	SetEntityCoords(queue2v2[4], Config.firstTeamSpawnCoords2v2[1], Config.firstTeamSpawnCoords2v2[2], Config.firstTeamSpawnCoords2v2[3], true, true, true, false)
-
+			for i=1,4 do 
+				SetEntityCoords(queue2v2[i], Config.firstTeamSpawnCoords2v2[1], Config.firstTeamSpawnCoords2v2[2], Config.firstTeamSpawnCoords2v2[3], true, true, true, false) 
+			end
 	    	SetEntityHeading(queue2v2[1], Config.firstTeamSpawnCoords2v2Heading)
 	    	SetEntityHeading(queue2v2[2], Config.firstTeamSpawnCoords2v2Heading)
 	    	SetEntityHeading(queue2v2[3], Config.secondTeamSpawnCoords2v2Heading)
 	    	SetEntityHeading(queue2v2[4], Config.secondTeamSpawnCoords2v2Heading)
 			for i=4,1,-1 do
 			    SetPlayerRoutingBucket(queue2v2[i], dimension2v2)
-
 			    RemoveAllPedWeapons(queue2v2[i], false)
 			    GiveWeaponToPed(queue2v2[i], GetHashKey("weapon_pistol_mk2"), 200, true)
 			    SetCurrentPedWeapon(queue2v2[i], GetHashKey("weapon_pistol_mk2"), true)
-
 			    TriggerClientEvent("pvpsystem:msg", queue2v2[i], 2)
 			end
-
 		    TriggerEvent("pvpsystem:die2v2", queue2v2[1], queue2v2[2], queue2v2[3], queue2v2[4])
-
 		    dimension2v2 = dimension2v2 + 1
-			table.remove(queue2v2, 4)
-		   	table.remove(queue2v2, 3)
-		    table.remove(queue2v2, 2)
-		   	table.remove(queue2v2, 1)
+			for i=4,1,-1 do 
+				table.remove(queue2v2, i) 
+			end
 		end
     Citizen.Wait(1200)
   	end
@@ -207,38 +183,11 @@ AddEventHandler("pvpsystem:die2v2", function(player1, player2, player3, player4)
 					TriggerClientEvent("pvpsystem:msgWon", player2)
 					TriggerClientEvent("pvpsystem:msgWon", player1)
 				end
-
 				Citizen.Wait(4000)
-
-				SetEntityCoords(GetPlayerPed(player1), Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3],1,0,0,1)
-				SetEntityHeading(player1, Config.respawnCoordsHeading)
-				SetPlayerRoutingBucket(player1, 0)
-				TriggerClientEvent("pvpsystem:revive", player1)
-				TriggerClientEvent("pvpsystem:heal", player1)
-				TriggerClientEvent("esx_ambulancejob:revive", player1)
-				
-				SetEntityCoords(GetPlayerPed(player2), Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3],1,0,0,1)
-				SetEntityHeading(player2, Config.respawnCoordsHeading)
-				SetPlayerRoutingBucket(player2, 0)
-				TriggerClientEvent("pvpsystem:revive", player2)
-				TriggerClientEvent("pvpsystem:heal", player2)
-				TriggerClientEvent("esx_ambulancejob:revive", player2)
-
-				
-				SetEntityCoords(GetPlayerPed(player3), Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3],1,0,0,1)
-				SetEntityHeading(player3, Config.respawnCoordsHeading)
-				SetPlayerRoutingBucket(player3, 0)
-				TriggerClientEvent("pvpsystem:revive", player3)
-				TriggerClientEvent("pvpsystem:heal", player3)
-				TriggerClientEvent("esx_ambulancejob:revive", player3)
-
-				
-				SetEntityCoords(GetPlayerPed(player4), Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3],1,0,0,1)
-				SetEntityHeading(player4, Config.respawnCoordsHeading)
-				SetPlayerRoutingBucket(player4, 0)
-				TriggerClientEvent("pvpsystem:revive", player4)
-				TriggerClientEvent("pvpsystem:heal", player4)
-				TriggerClientEvent("esx_ambulancejob:revive", player4)
+				revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+				revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+				revivePlayer(player3, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+				revivePlayer(player4, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				break
 			end
 			Citizen.Wait(1)
@@ -246,25 +195,6 @@ AddEventHandler("pvpsystem:die2v2", function(player1, player2, player3, player4)
 	end)
 end)
 
-
 -- WHEN THE DIMENSION REACHES THE LIMIT, IT RETURNS TO THE INITIAL NUMBER
-
--- 1V1
-Citizen.CreateThread(function()
-	while true do
-		if (dimension1v1==(initialdimension1v1+301)) then
-			dimension1v1=initialdimension2v2
-		end
-		Citizen.Wait(10)
-	end
-end)
-
--- 2V2
-Citizen.CreateThread(function()
-	while true do
-		if (dimension2v2==(initialdimension2v2+301)) then
-			dimension2v2=initialdimension2v2
-		end
-		Citizen.Wait(10)
-	end
-end)
+dimensions(dimension1v1, initialDimension1v1) -- 1v1 Dimension
+dimensions(dimension1v1, initialDimension2v2) -- 2v2 Dimension
