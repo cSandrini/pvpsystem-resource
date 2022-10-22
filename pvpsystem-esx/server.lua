@@ -97,7 +97,7 @@ AddEventHandler("pvpsystem:comargs", function(player1, player2)
 	-- CHECK IF ANY PLAYER DIE
     TriggerEvent("pvpsystem:die1v1", player1, player2)
 	-- DIMENSIONS SETTINGS
-	dimension1v1 = dimension1v1 + 1 
+	dimension1v1 = dimension1v1 + 1
 end)
 
 -- 1V1 COMMAND 
@@ -105,7 +105,7 @@ RegisterCommand("1v1", function(source, args)
 	if (args[1]==nil) then
 		TriggerClientEvent("pvpsystem:pvpqueue", source, 1)
 	else
-		TriggerClientEvent("pvpsystem:request", args[1], args[1], source)
+		TriggerClientEvent("pvpsystem:request", args[1], source, args[1])
 	end
 end)
 

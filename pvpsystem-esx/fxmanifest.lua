@@ -1,9 +1,9 @@
-fx_version "cerulean"
-games {"gta5"}
+fx_version 'cerulean'
+games {'gta5'}
 
-name "pvpsystem"
-description "PvP System (1V1, 2V2)"
-version "1.2"
+name 'pvpsystem'
+description 'PvP System (1V1, 2V2)'
+version '1.3'
 
 shared_scripts {
 	'@es_extended/imports.lua'
@@ -11,11 +11,11 @@ shared_scripts {
 
 server_scripts {
 	'config.lua',
-	"server.lua"
+	'server.lua'
 }
 
 client_scripts {
-	"client.lua"
+	'client.lua'
 }
 
 ui_page 'NUI/index.html'

@@ -5,32 +5,22 @@ counter = 0 -- IF COUNTER EQUALS 1 THE PLAYER IS IN THE QUEUE
 -- MESSAGES
 RegisterNetEvent("pvpsystem:msg")
 AddEventHandler("pvpsystem:msg", function(numero)
-	QBCore.Functions.Notify("You are in the arena: #"..numero, "success", 4000)
+	QBCore.Functions.Notify("You are in the arena: #"..numero, "success", 3000)
 	SetGameplayCamRelativeHeading(0)
 end)
 
 RegisterNetEvent("pvpsystem:msgWon")
 AddEventHandler("pvpsystem:msgWon", function()
-    QBCore.Functions.Notify("You won!", "success", 4000)
+    QBCore.Functions.Notify("You won!", "success", 3000)
 	SetGameplayCamRelativeHeading(0)
     counter = 0
 end)
 
 RegisterNetEvent("pvpsystem:msgLost")
 AddEventHandler("pvpsystem:msgLost", function()
-	QBCore.Functions.Notify("You lost!", "error", 4000)
+	QBCore.Functions.Notify("You lost!", "error", 3000)
     SetGameplayCamRelativeHeading(0)
     counter = 0
-end)
-
--- RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
---
--- end)
-
-RegisterNetEvent("pvpsystem:msgQuit")
-AddEventHandler("pvpsystem:msgQuit", function()
-	QBCore.Functions.Notify("A player disconnected", "error", 4000)
-	SetGameplayCamRelativeHeading(0)
 end)
 
 -- ADD PLAYER TO A QUEUE
@@ -40,19 +30,19 @@ AddEventHandler("pvpsystem:pvpqueue", function(ident, player, args)
 		if (args==nil) then
 			if (ident==1) then
 				if (counter == 0) then
-					QBCore.Functions.Notify("You joined the queue (1v1)", "primary", 4000)
+					QBCore.Functions.Notify("You joined the queue (1v1)", "success", 3000)
 					TriggerServerEvent("pvpsystem:counter1v1", source)
 					counter = 1
 				else
-					QBCore.Functions.Notify("You are already in a queue", "error", 4000)
+					QBCore.Functions.Notify("You are already in a queue", "error", 3000)
 				end
 			else
 				if (counter == 0) then
-					QBCore.Functions.Notify("You joined the queue (2v2)", "primary", 4000)
+					QBCore.Functions.Notify("You joined the queue (2v2)", "success", 3000)
 					TriggerServerEvent("pvpsystem:counter2v2", source)
 					counter = 1
 				else 
-					QBCore.Functions.Notify("You are already in a queue", "error", 4000)
+					QBCore.Functions.Notify("You are already in a queue", "error", 3000)
 				end
 			end
 		else
