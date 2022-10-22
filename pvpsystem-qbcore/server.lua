@@ -93,7 +93,7 @@ AddEventHandler("pvpsystem:comargs", function(player1, player2)
 	-- PLAYER 1
 	function1v1(player1, Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], Config.firstSpawnCoords1v1Heading, dimension1v1) 
 	-- PLAYER 2
-	function1v1(player2, Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1) 
+	function1v1(tonumber(player2), Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1) 
 	-- CHECK IF ANY PLAYER DIE
     TriggerEvent("pvpsystem:die1v1", player1, player2)
 	-- DIMENSIONS SETTINGS
