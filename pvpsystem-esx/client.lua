@@ -3,24 +3,10 @@ ESX = exports["es_extended"]:getSharedObject()
 counter = 0 -- IF COUNTER EQUALS 1 THE PLAYER IS IN THE QUEUE
 
 -- MESSAGES
-RegisterNetEvent("pvpsystem:msg")
-AddEventHandler("pvpsystem:msg", function(numero)
-	ESX.ShowNotification("You are in the arena: #"..numero, "success", 3000)
-	SetGameplayCamRelativeHeading(0)
-end)
-
-RegisterNetEvent("pvpsystem:msgWon")
-AddEventHandler("pvpsystem:msgWon", function()
-    ESX.ShowNotification("You won!", "success", 3000)
-	SetGameplayCamRelativeHeading(0)
-    counter = 0
-end)
-
-RegisterNetEvent("pvpsystem:msgLost")
-AddEventHandler("pvpsystem:msgLost", function()
-	ESX.ShowNotification("You lost!", "error", 3000)
-    SetGameplayCamRelativeHeading(0)
-    counter = 0
+RegisterNetEvent("pvpsystem:notify")
+AddEventHandler("pvpsystem:notify", function(text, typeMsg, time, heading)
+	ESX.ShowNotification(text, typeMsg, time)
+	if heading then SetGameplayCamRelativeHeading(0) end
 end)
 
 -- ADD PLAYER TO A QUEUE
@@ -56,12 +42,8 @@ end)
 
 -- REVIVE PLAYER
 RegisterNetEvent("pvpsystem:revive")
-AddEventHandler("pvpsystem:revive", function()
+AddEventHandler("pvpsystem:revive", function(id)
 	NetworkResurrectLocalPlayer(-1497.45, 139.64, 55.65, true, true, false)
-end)
-
-RegisterNetEvent("pvpsystem:heal")
-AddEventHandler("pvpsystem:heal", function(id)
 	SetEntityHealth(GetPlayerFromServerId(id), 200)
 end)
 

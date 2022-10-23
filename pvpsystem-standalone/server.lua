@@ -6,7 +6,8 @@ function function1v1(player, x, y, z, heading, dimension)
 	RemoveAllPedWeapons(player, false)
 	GiveWeaponToPed(player, GetHashKey("weapon_pistol_mk2"), 200, true)
 	SetCurrentPedWeapon(player, GetHashKey("weapon_pistol_mk2"), true)
-	TriggerClientEvent("pvpsystem:notify", player, "You are in the arena: #1", "success", 3000, true)
+	TriggerClientEvent("pvpsystem:notify", player, "You are in the arena: ~b~#1", true)
+
 end
 
 function revivePlayer(player, x, y, z, heading)
@@ -14,7 +15,6 @@ function revivePlayer(player, x, y, z, heading)
 	SetEntityHeading(player, heading)
 	SetPlayerRoutingBucket(player, 0)
 	TriggerClientEvent("pvpsystem:revive", player, player)
-	TriggerClientEvent("hospital:client:Revive", player)
 end
 
 function dimensions(dimension, initialDimension)
@@ -92,17 +92,19 @@ AddEventHandler("pvpsystem:comargs", function(player1, player2)
 	-- PLAYER 1
 	function1v1(player1, Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], Config.firstSpawnCoords1v1Heading, dimension1v1) 
 	-- PLAYER 2
-	function1v1(tonumber(player2), Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1) 
+	function1v1(tonumber(player2), Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1)  
 	-- CHECK IF ANY PLAYER DIE
     TriggerEvent("pvpsystem:die1v1", player1, player2)
 	-- DIMENSIONS SETTINGS
 	dimension1v1 = dimension1v1 + 1 
 end)
 
--- 1V1 COMMAND
+-- 1V1 COMMAND 
 RegisterCommand("1v1", function(source, args)
 	if (args[1]==nil) then
 		TriggerClientEvent("pvpsystem:pvpqueue", source, 1)
+	elseif (source==tonumber(args[1])) then
+		TriggerClientEvent("pvpsystem:notify", source, "~r~You can't challenge yourself!", false)
 	else
 		TriggerClientEvent("pvpsystem:request", args[1], source, args[1])
 	end
@@ -120,13 +122,13 @@ AddEventHandler("pvpsystem:die1v1", function(player1, player2)
 		while true do
 			if (GetEntityHealth(GetPlayerPed(player1))<=healthlimit or GetEntityHealth(GetPlayerPed(player2))<=healthlimit) then
 				if (GetEntityHealth(GetPlayerPed(player1))<=healthlimit) then
-					TriggerClientEvent("pvpsystem:notify", player1, "You lost", "error", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player2, "You won!", "success", 3000, true)
+					TriggerClientEvent("pvpsystem:notify", player1, "~r~You lost!", true)
+					TriggerClientEvent("pvpsystem:notify", player2, "~g~You won!", true)
 				elseif (GetEntityHealth(GetPlayerPed(player2))<=healthlimit) then
-					TriggerClientEvent("pvpsystem:notify", player1, "You won!", "success", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player2, "You lost!", "error", 3000, true)
+					TriggerClientEvent("pvpsystem:notify", player2, "~g~You won!", true)
+					TriggerClientEvent("pvpsystem:notify", player1, "~g~You lost!", true)
 				end
-				Citizen.Wait(4000)
+				Citizen.Wait(1500)
 				-- REVIVE PLAYERS
 				revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
@@ -153,7 +155,7 @@ Citizen.CreateThread(function()
 			    RemoveAllPedWeapons(queue2v2[i], false)
 			    GiveWeaponToPed(queue2v2[i], GetHashKey("weapon_pistol_mk2"), 200, true)
 			    SetCurrentPedWeapon(queue2v2[i], GetHashKey("weapon_pistol_mk2"), true)
-			    TriggerClientEvent("pvpsystem:notify", queue2v2[i], "You are in the arena: #2", "success", 3000, true)
+				TriggerClientEvent("pvpsystem:notify", queue2v2[i], "You are in the arena: ~b~#2", true)
 			end
 		    TriggerEvent("pvpsystem:die2v2", queue2v2[1], queue2v2[2], queue2v2[3], queue2v2[4])
 		    dimension2v2 = dimension2v2 + 1
@@ -172,18 +174,17 @@ AddEventHandler("pvpsystem:die2v2", function(player1, player2, player3, player4)
 		while true do
 			if (GetEntityHealth(GetPlayerPed(player1))<=healthlimit and GetEntityHealth(GetPlayerPed(player2))<=healthlimit or GetEntityHealth(GetPlayerPed(player3))<=healthlimit and GetEntityHealth(GetPlayerPed(player4))<=healthlimit) then
 				if (GetEntityHealth(GetPlayerPed(player1))<=healthlimit and GetEntityHealth(GetPlayerPed(player2))<=healthlimit) then
-					TriggerClientEvent("pvpsystem:notify", player1, "You lost!", "error", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player2, "You lost!", "error", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player3, "You won!", "success", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player4, "You won!", "success", 3000, true)
+					TriggerClientEvent("pvpsystem:notify", player1, "~r~You lost!", true)
+					TriggerClientEvent("pvpsystem:notify", player2, "~r~You lost!", true)
+					TriggerClientEvent("pvpsystem:notify", player3, "~g~You won!", true)
+					TriggerClientEvent("pvpsystem:notify", player4, "~g~You won!", true)
 				elseif (GetEntityHealth(GetPlayerPed(player3))<=healthlimit and GetEntityHealth(GetPlayerPed(player4))<=healthlimit) then
-					TriggerClientEvent("pvpsystem:notify", player4, "You lost!", "error", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player3, "You lost!", "error", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player2, "You won!", "success", 3000, true)
-					TriggerClientEvent("pvpsystem:notify", player2, "You won!", "success", 3000, true)
-
+					TriggerClientEvent("pvpsystem:notify", player4, "~r~You lost!", true)
+					TriggerClientEvent("pvpsystem:notify", player3, "~r~You lost!", true)
+					TriggerClientEvent("pvpsystem:notify", player2, "~g~You won!", true)
+					TriggerClientEvent("pvpsystem:notify", player1, "~g~You won!", true)
 				end
-				Citizen.Wait(4000)
+				Citizen.Wait(1500)
 				revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				revivePlayer(player3, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)

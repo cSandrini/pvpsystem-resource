@@ -3,24 +3,10 @@ local QBCore = exports['qb-core']:GetCoreObject()
 counter = 0 -- IF COUNTER EQUALS 1 THE PLAYER IS IN THE QUEUE
 
 -- MESSAGES
-RegisterNetEvent("pvpsystem:msg")
-AddEventHandler("pvpsystem:msg", function(numero)
-	QBCore.Functions.Notify("You are in the arena: #"..numero, "success", 3000)
-	SetGameplayCamRelativeHeading(0)
-end)
-
-RegisterNetEvent("pvpsystem:msgWon")
-AddEventHandler("pvpsystem:msgWon", function()
-    QBCore.Functions.Notify("You won!", "success", 3000)
-	SetGameplayCamRelativeHeading(0)
-    counter = 0
-end)
-
-RegisterNetEvent("pvpsystem:msgLost")
-AddEventHandler("pvpsystem:msgLost", function()
-	QBCore.Functions.Notify("You lost!", "error", 3000)
-    SetGameplayCamRelativeHeading(0)
-    counter = 0
+RegisterNetEvent("pvpsystem:notify")
+AddEventHandler("pvpsystem:notify", function(text, typeMsg, time, heading)
+	QBCore.Functions.Notify(text, typeMsg, time)
+	if heading then SetGameplayCamRelativeHeading(0) end
 end)
 
 -- ADD PLAYER TO A QUEUE
@@ -56,8 +42,9 @@ end)
 
 -- REVIVE PLAYER
 RegisterNetEvent("pvpsystem:revive")
-AddEventHandler("pvpsystem:revive", function()
+AddEventHandler("pvpsystem:revive", function(id)
 	NetworkResurrectLocalPlayer(-1497.45, 139.64, 55.65, true, true, false)
+	SetEntityHealth(GetPlayerFromServerId(id), 200)
 end)
 
 RegisterNetEvent("pvpsystem:heal")
