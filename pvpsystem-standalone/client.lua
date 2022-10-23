@@ -7,6 +7,11 @@ AddEventHandler("pvpsystem:notify", function(text, heading)
 	if heading then SetGameplayCamRelativeHeading(0) end
 end)
 
+RegisterNetEvent("pvpsystem:cancelCounter")
+AddEventHandler("pvpsystem:cancelCounter", function()
+	counter = 0
+end)
+
 -- ADD PLAYER TO A QUEUE
 RegisterNetEvent("pvpsystem:pvpqueue")
 AddEventHandler("pvpsystem:pvpqueue", function(ident, player, args)
@@ -15,7 +20,9 @@ AddEventHandler("pvpsystem:pvpqueue", function(ident, player, args)
 				if (counter == 0) then
 					notify("~g~You joined the queue (1v1)")
 					TriggerServerEvent("pvpsystem:counter1v1", source)
-					counter = 1
+                    if (Config.developerMode == false) then
+					    counter = 1
+                    end
 				else
 					notify("~r~You are already in a queue")
 				end
@@ -23,15 +30,19 @@ AddEventHandler("pvpsystem:pvpqueue", function(ident, player, args)
 				if (counter == 0) then
 					notify("~g~You joined the queue (2v2)")
 					TriggerServerEvent("pvpsystem:counter2v2", source)
-					counter = 1
+					if (Config.developerMode == false) then    
+                        counter = 1
+                    end
 				else 
 					notify("~r~You are already in a queue")
 				end
 			end
 		else
-			if (counter==0) then
+			if (counter == 0) then
 				TriggerServerEvent("pvpsystem:comargs", player, args)
-				counter = 1
+				if (Config.developerMode == false) then
+                    counter = 1
+                end
 			end
 		end
 end)

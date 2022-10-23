@@ -14,6 +14,14 @@ function function1v1(player, x, y, z, heading, dimension)
 	TriggerClientEvent("pvpsystem:notify", player, "You are in the arena: ~b~#1", true)
 end
 
+function function2v2(player, dimension)
+	SetPlayerRoutingBucket(player, dimension)
+	RemoveAllPedWeapons(player, false)
+	GiveWeaponToPed(player, GetHashKey(Config.weapon2v2), 200, true)
+	SetCurrentPedWeapon(player, GetHashKey(Config.weapon2v2), true)
+	TriggerClientEvent("pvpsystem:notify", player, "You are in the arena: #2", "success", 3000, true)
+end
+
 function revivePlayer(player, x, y, z, heading)
 	SetEntityCoords(player, x, y,  z, false, true, true, false)
 	SetEntityHeading(player, heading)
@@ -60,6 +68,27 @@ if Config.disableVehicles then
 	end
 end
 
+-- CANCEL QUEUE
+RegisterServerEvent("pvpsystem:cancelQueue")
+AddEventHandler("pvpsystem:cancelQueue", function(id)
+	-- CANCEL 1v1 QUEUE
+	for i=#queue1v1,1,-1 do
+		if queue1v1[i] == id then
+			table.remove(queue1v1, i)
+			break
+		end
+	end
+	-- CANCEL 2v2 QUEUE
+	for i=#queue2v2,1,-1 do
+		if queue2v2[i] == id then
+			table.remove(queue2v2, i)
+			break
+		end
+	end
+	TriggerClientEvent("pvpsystem:cancelCounter", id)
+end)
+
+
 -- ADD A PLAYER TO THE 1V1 QUEUE
 RegisterServerEvent("pvpsystem:counter1v1")
 AddEventHandler("pvpsystem:counter1v1", function()
@@ -95,21 +124,20 @@ end)
 -- 1V1 WITHOUT QUEUE, NEEDS AN ID OF A FRIEND (EX: /1v1 [id])
 RegisterServerEvent("pvpsystem:comargs")
 AddEventHandler("pvpsystem:comargs", function(player1, player2)
+	dimension1v1 = dimension1v1 + 1 -- DIMENSIONS SETTINGS
 	-- PLAYER 1
 	function1v1(player1, Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], Config.firstSpawnCoords1v1Heading, dimension1v1) 
 	-- PLAYER 2
 	function1v1(tonumber(player2), Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1)  
 	-- CHECK IF ANY PLAYER DIE
     TriggerEvent("pvpsystem:die1v1", player1, player2)
-	-- DIMENSIONS SETTINGS
-	dimension1v1 = dimension1v1 + 1 
 end)
 
 -- 1V1 COMMAND 
 RegisterCommand("1v1", function(source, args)
 	if (args[1]==nil) then
 		TriggerClientEvent("pvpsystem:pvpqueue", source, 1)
-	elseif (source==tonumber(args[1])) then
+	elseif (source==tonumber(args[1]) and Config.developerMode==false) then
 		TriggerClientEvent("pvpsystem:notify", source, "~r~You can't challenge yourself!", false)
 	else
 		TriggerClientEvent("pvpsystem:request", args[1], source, args[1])
@@ -119,6 +147,11 @@ end)
 -- 2V2 COMMAND 
 RegisterCommand("2v2", function(source)
 	TriggerClientEvent("pvpsystem:pvpqueue", source, 2)
+end)
+
+RegisterCommand("cancelQueue", function(source)
+	TriggerEvent("pvpsystem:cancelQueue", source)
+	TriggerClientEvent("pvpsystem:notify", source, "Queue canceled!", "primary", 3000, false)
 end)
 
 -- IF SOMEONE DIE THE PLAYERS GO TO A POINT (1V1)
@@ -157,11 +190,7 @@ Citizen.CreateThread(function()
 	    	SetEntityHeading(queue2v2[3], Config.secondTeamSpawnCoords2v2Heading)
 	    	SetEntityHeading(queue2v2[4], Config.secondTeamSpawnCoords2v2Heading)
 			for i=4,1,-1 do
-			    SetPlayerRoutingBucket(queue2v2[i], dimension2v2)
-			    RemoveAllPedWeapons(queue2v2[i], false)
-			    GiveWeaponToPed(queue2v2[i], GetHashKey("weapon_pistol_mk2"), 200, true)
-			    SetCurrentPedWeapon(queue2v2[i], GetHashKey("weapon_pistol_mk2"), true)
-				TriggerClientEvent("pvpsystem:notify", queue2v2[i], "You are in the arena: ~b~#2", true)
+			    function2v2(queue2v2[i], dimension2v2)
 			end
 		    TriggerEvent("pvpsystem:die2v2", queue2v2[1], queue2v2[2], queue2v2[3], queue2v2[4])
 		    dimension2v2 = dimension2v2 + 1

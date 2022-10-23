@@ -1,9 +1,15 @@
 -- CONFIG FILE -- PvP System
 Config = {}
 
+-- DEVELOPER MODE - IF YOU ARE TESTING WITHOUT ANOTHER PLAYER: TRUE - PLAYER IS ENABLE TO JOIN IN A QUEUE MORE THAN 1 TIME
+Config.developerMode = false
+
 -- ENABLE VEHICLES IN SOME DIMENSION 
 Config.disableVehicles = true -- This resource disable the spawn of vehicles in some pvp dimensions. To disable this turn the variable to false.
 
+-- WEAPONS - Default: Pistol MK2 = "weapon_pistol_mk2"
+Config.weapon1v1 = "weapon_pistol_mk2" -- Weapon 1v1 
+Config.weapon2v2 = "weapon_pistol_mk2" -- Weapon 2v2
 
 -- COORDS
 Config.respawnCoords = {-1497.45, 139.64, 55.65} -- Respawn point coords // {X, Y, Z} 
