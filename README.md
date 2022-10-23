@@ -11,10 +11,10 @@ Contain two arenas `(ymaps)`.
 
 | Command | Description |
 | ------- | ----------- |
-| `1v1` | Join the player to the 1v1 queue |
-| `1v1 [ID]` | Request a player to a duel |
-| `2v2` | Join the team to the 2v2 queue |
-| `cancelqueue` | Cancel any queue |
+| `/1v1` | Join the player to the 1v1 queue |
+| `/1v1 [ID]` | Request a player to a duel |
+| `/2v2` | Join the team to the 2v2 queue |
+| `/cancelqueue` | Cancel any queue |
 
 ## Preview
 ![img](https://user-images.githubusercontent.com/55068969/194797053-001effa5-4cc3-46b7-9446-e690a7f454ce.png)
