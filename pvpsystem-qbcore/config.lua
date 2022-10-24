@@ -2,7 +2,7 @@
 Config = {}
 
 -- DEVELOPER MODE - IF YOU ARE TESTING WITHOUT ANOTHER PLAYER: TRUE - PLAYER IS ENABLE TO JOIN IN A QUEUE MORE THAN 1 TIME
-Config.developerMode = false
+Config.developerMode = true
 
 -- ENABLE VEHICLES IN SOME DIMENSION 
 Config.disableVehicles = true -- This resource disable the spawn of vehicles in some pvp dimensions. To disable this turn the variable to false.

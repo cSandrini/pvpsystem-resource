@@ -64,13 +64,13 @@ AddEventHandler("pvpsystem:heal", function(id)
 end)
 
 RegisterNetEvent("pvpsystem:request")
-AddEventHandler("pvpsystem:request", function(id1, id2)
+AddEventHandler("pvpsystem:request", function(id1, id2, rounds)
 	if LocalPlayer.state['isLoggedIn'] then
-		notification("pvpsystem:comargs", true, id1, id2, nil, nil, 30000, "1v1 Challenge! [ID] ".. id1)
+		notification("pvpsystem:comargs", true, id1, id2, rounds, 30000, "1v1 Challenge! [ID] ".. id1)
 	end
 end)
 
-function notification(trigger, isServer, params1, params2, params3, params4, time, text)
+function notification(trigger, isServer, params1, params2, params3, time, text)
     SendNUIMessage({
         action = "request",
         text = text,
@@ -83,11 +83,11 @@ function notification(trigger, isServer, params1, params2, params3, params4, tim
     while time > time2 do
         if IsControlJustPressed(1, 246) then -- IF PRESSED Y
             if isServer == true then
-                TriggerServerEvent(trigger, params1, params2, params3, params4)
+                TriggerServerEvent(trigger, params1, params2, params3)
                 SendNUIMessage({close = true})
                 break
             else 
-                TriggerEvent(trigger, params1, params2, params3, params4)
+                TriggerEvent(trigger, params1, params2, params3)
                 SendNUIMessage({close = true})
                 break
             end

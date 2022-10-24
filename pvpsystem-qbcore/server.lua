@@ -49,7 +49,7 @@ dimension1v1 = initialDimension1v1 -- INITIAL DIMENSION 1V1
 
 -- VARS TO 2v2
 queue2v2={}
-initialDimension2v2 = 100
+initialDimension2v2 = 1000
 dimension2v2 = initialDimension2v2 -- INITIAL DIMENSION 2V2
 
 -- DISABLE VEHICLES IN THE SOME DIMENSIONS
@@ -114,26 +114,39 @@ Citizen.CreateThread(function()
   	end
 end)
 
--- 1V1 WITHOUT QUEUE, NEEDS AN ID OF A FRIEND (EX: /1v1 [id])
+-- 1V1 WITHOUT QUEUE, NEEDS AN ID OF A FRIEND (EX: /1v1 [id] [rounds])
 RegisterServerEvent("pvpsystem:comargs")
-AddEventHandler("pvpsystem:comargs", function(player1, player2)
+AddEventHandler("pvpsystem:comargs", function(player1, player2, rounds)
+	if rounds == nil then
+		rounds = 1
+	end
 	dimension1v1 = dimension1v1 + 1 -- DIMENSIONS SETTINGS
 	-- PLAYER 1
 	function1v1(player1, Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], Config.firstSpawnCoords1v1Heading, dimension1v1) 
 	-- PLAYER 2
-	function1v1(tonumber(player2), Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1) 
+	function1v1(player2, Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading, dimension1v1) 
 	-- CHECK IF ANY PLAYER DIE
-	TriggerEvent("pvpsystem:die1v1", player1, player2)
+	TriggerEvent("pvpsystem:die1v1", player1, player2, rounds)
 end)
 
 -- 1V1 COMMAND
 RegisterCommand("1v1", function(source, args)
-	if (args[1]==nil) then
+	if args[1]~=nil then
+		idRequested = tonumber(args[1])
+	end
+	if args[2]~=nil then
+		rounds = tonumber(args[2])
+	else
+		rounds = 1
+	end
+	if (idRequested==nil) then
 		TriggerClientEvent("pvpsystem:pvpqueue", source, 1)
-	elseif (source==tonumber(args[1]) and Config.developerMode==false) then
+	elseif (rounds<=0 or type(rounds) ~= "number") then
+		TriggerClientEvent("pvpsystem:notify", source, "Invalid number!", "error", 3000, false)
+	elseif (source==idRequested and Config.developerMode==false) then
 		TriggerClientEvent("pvpsystem:notify", source, "You can't challenge yourself!", "error", 3000, false)
 	else
-		TriggerClientEvent("pvpsystem:request", args[1], source, args[1])
+		TriggerClientEvent("pvpsystem:request", idRequested, source, idRequested, rounds)
 	end
 end)
 
@@ -149,7 +162,7 @@ end)
 
 -- IF SOMEONE DIE THE PLAYERS GO TO A POINT (1V1)
 RegisterServerEvent("pvpsystem:die1v1")
-AddEventHandler("pvpsystem:die1v1", function(player1, player2)
+AddEventHandler("pvpsystem:die1v1", function(player1, player2, rounds)
 	Citizen.CreateThread(function()
 		while true do
 			if (GetEntityHealth(GetPlayerPed(player1))<=healthlimit or GetEntityHealth(GetPlayerPed(player2))<=healthlimit) then
@@ -160,10 +173,19 @@ AddEventHandler("pvpsystem:die1v1", function(player1, player2)
 					TriggerClientEvent("pvpsystem:notify", player1, "You won!", "success", 3000, true)
 					TriggerClientEvent("pvpsystem:notify", player2, "You lost!", "error", 3000, true)
 				end
-				Citizen.Wait(4000)
-				-- REVIVE PLAYERS
-				revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
-				revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+				Citizen.Wait(5000)
+				if rounds > 1 then
+					-- REVIVE PLAYERS
+					revivePlayer(player1, Config.firstSpawnCoords1v1[1], Config.firstSpawnCoords1v1[2], Config.firstSpawnCoords1v1[3], Config.firstSpawnCoords1v1Heading)
+					revivePlayer(player2, Config.secondSpawnCoords1v1[1], Config.secondSpawnCoords1v1[2], Config.secondSpawnCoords1v1[3], Config.secondSpawnCoords1v1Heading)
+					TriggerEvent("pvpsystem:comargs", player1, player2, rounds-1)
+				else 
+					-- REVIVE PLAYERS
+					revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+					revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+					TriggerClientEvent("pvpsystem:cancelCounter", player1)
+					TriggerClientEvent("pvpsystem:cancelCounter", player2)
+				end
 				break
 			end
 			Citizen.Wait(1)
@@ -213,7 +235,7 @@ AddEventHandler("pvpsystem:die2v2", function(player1, player2, player3, player4)
 					TriggerClientEvent("pvpsystem:notify", player2, "You won!", "success", 3000, true)
 
 				end
-				Citizen.Wait(4000)
+				Citizen.Wait(5000)
 				revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				revivePlayer(player3, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
