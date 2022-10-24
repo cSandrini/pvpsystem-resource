@@ -165,6 +165,8 @@ AddEventHandler("pvpsystem:die1v1", function(player1, player2)
 				-- REVIVE PLAYERS
 				revivePlayer(player1, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
 				revivePlayer(player2, Config.respawnCoords[1], Config.respawnCoords[2], Config.respawnCoords[3], Config.respawnCoordsHeading)
+				TriggerClientEvent("pvpsystem:cancelCounter", player1)
+				TriggerClientEvent("pvpsystem:cancelCounter", player2)
 				break
 			end
 			Citizen.Wait(1)
