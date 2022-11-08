@@ -46,6 +46,7 @@ AddEventHandler("pvpsystem:pvpqueue", function(ident, player, args)
 				if (Config.developerMode == false) then
 					counter = 1
 				end
+			end
 		end
 	end
 end)
